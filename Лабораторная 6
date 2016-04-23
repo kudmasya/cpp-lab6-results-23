@@ -1,0 +1,102 @@
+#include "stdafx.h"
+#include <conio.h>
+#include <iostream>
+#include <stdlib.h>
+#include <iomanip>
+#include <stdio.h>
+#include <ctime>
+ 
+using namespace std;
+template<class T>
+class matrix{
+private:
+    T **mas;     
+    int n,m;
+public:
+    matrix(){}
+   int matrix_get_n() {return n;}
+    int matrix_get_m() {return m;}
+    T** get() {return mas;}
+    void set(T** mas1) {mas=mas1;}
+    matrix(int n1, int m1);
+    void out();
+    matrix(const matrix<T> &a);
+    ~matrix(); 
+ 
+ 
+    matrix<T> operator *(matrix <T> &b); 
+};
+ 
+template<class T>
+matrix<T>::matrix(int n1, int m1){
+    n=n1;
+    m=m1;
+    mas = new T* [n];
+    for (int i=0; i<n;i++){
+    mas[i]=new T[m];
+    } 
+    srand(time(0));
+	for (int k=0; k<n; k++){
+    for (int i=0; i<m;i++){
+    mas[k][i] = rand()%10-5;
+    }
+    } 
+}
+template<class T>
+void matrix<T>::out()
+{
+    for (int k=0; k<n; k++){
+    for (int i=0; i<m;i++){
+    cout << setw (4)<< mas[k][i];
+    }
+    cout <<endl;
+        }
+    cout << endl;
+}
+template<class T>
+matrix<T>::matrix(const matrix<T> &a)
+{
+    n=a.n;
+    m=a.m;
+    mas = new T* [n];
+    for (int i=0; i<n;i++){
+    mas[i]=new T[m];
+    } 
+    for (int k=0; k<n; k++){
+    for (int i=0; i<m;i++){
+    mas[k][i] = a.mas[k][i];
+    }
+    }
+}
+template<class T>
+matrix<T>::~matrix(){
+    for (int i=0; i<n; i++) delete[] mas[i];
+    delete []mas;
+}
+ 
+template<class T>
+matrix<T> matrix<T>::operator *(matrix<T> &b){
+      matrix<T> c(n,m);
+    for (int k=0; k< n; k++) {
+        for (int i=0; i<m;i++)
+       { c.mas[k][i]=0;
+        for(int j=0; j<b.n; j++) {
+        c.mas[k][i]+= (mas[k][j]*b.mas[j][i]);
+          }}}
+    return c;
+    }
+ 
+int main()
+{ 
+    matrix<float> a(2,2);
+    cout<<"1. Matrix A:"<<endl;
+    a.out();
+    matrix<float> b(2,2);
+    cout<<"2. Matrix B:"<<endl;
+    b.out();
+
+    cout<<"3.Umnojenie matrits  A and B:"<<endl << endl;
+    (a*b).out();
+   getch();
+   return 0;
+} 
